@@ -1,0 +1,7 @@
+flask
+google-cloud-storage
+google-cloud-vision
+celery
+google-auth
+google-auth-oauthlib
+redis
