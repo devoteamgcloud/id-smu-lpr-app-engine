@@ -22,7 +22,7 @@ This project uses Cloud Vision API and Cloud Storage to recognize license plate 
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/evanfebrianto-dt/id-smu-lpr-app-engine.git`
+1. Clone the repository: `git clone https://github.com/devoteamgcloud/id-smu-lpr-app-engine.git`
 2. Navigate to the directory: `cd `
 3. Install the required libraries: `pip install -r requirements.txt`
 
