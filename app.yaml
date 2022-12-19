@@ -5,4 +5,9 @@ env: flex
 # The server must bind to $PORT environment variable.
 # https://cloud.google.com/appengine/docs/flexible/custom-runtimes/configuring-your-app-with-app-yaml
 service: id-smu-lpr
-entrypoint: streamlit run LicensePlateRecognition.py --server.port $PORT
+
+# Turn off automatic scaling in favor of a manual target of 1 instance.
+manual_scaling:
+  instances: 1
+
+entrypoint: streamlit run LicensePlateRecognition.py --server.port $PORT --server.enableXsrfProtection=false

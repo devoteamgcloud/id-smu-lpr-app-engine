@@ -14,4 +14,4 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 EXPOSE 8080
 
 # Run streamlit when the container launches
-CMD streamlit run LicensePlateRecognition.py --server.port 8080
+CMD streamlit run LicensePlateRecognition.py --server.port 8080 --server.enableXsrfProtection=false
