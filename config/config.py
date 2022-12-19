@@ -1,5 +1,5 @@
 # Define all the constants
 
-PROJECT_ID = "evan-playground-devoteam"
-BUCKET_NAME = "dataset-evan"
-FOLDER_PATH_IN_BUCKET = "id-smu-lpr"
+PROJECT_ID = "dvt-apac-playground-3"
+BUCKET_NAME = "id-smu-lpr"
+FOLDER_PATH_IN_BUCKET = "raw-images"

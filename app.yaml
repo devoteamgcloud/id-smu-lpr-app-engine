@@ -1,0 +1,8 @@
+runtime: custom
+env: flex
+
+# This is the command that will be run to start your server.
+# The server must bind to $PORT environment variable.
+# https://cloud.google.com/appengine/docs/flexible/custom-runtimes/configuring-your-app-with-app-yaml
+service: id-smu-lpr
+entrypoint: streamlit run LicensePlateRecognition.py --server.port $PORT

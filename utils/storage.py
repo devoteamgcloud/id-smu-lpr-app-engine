@@ -1,4 +1,5 @@
 # Define a class of StorageHandler to handle the storage of the data in the cloud storage
+import base64
 from google.cloud import storage
 import uuid, os
 
@@ -10,14 +11,27 @@ class StorageHandler:
         self.bucket = self.storage_client.get_bucket(bucket_name)
         self.folder_path_in_bucket = folder_path_in_bucket
 
+    def encode_image(self, image_path):
+        """Encodes an image to base64."""
+        with open(image_path, "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read())
+        return encoded_string
+    
+    def upload_base64_image(self, base64_image_string):
+        """Uploads an encoded image to the bucket."""
+        destination_blob_name = f'{str(uuid.uuid4())}.jpg'
+        blob = self.bucket.blob(f'{self.folder_path_in_bucket}/{destination_blob_name}')
+        blob.upload_from_string(base64.b64decode(base64_image_string))
+        print(f"File  uploaded to {self.folder_path_in_bucket}/{destination_blob_name}.")
+
     def upload_binary(self, source_file):
         """Uploads a file to the bucket."""
         # Get file extension
-        file_extension = os.path.splitext(source_file.filename)[1]
-        destination_blob_name = f'{str(uuid.uuid4())}.{file_extension}'
+        file_extension = os.path.splitext(source_file)[-1]
+        destination_blob_name = f'{str(uuid.uuid4())}{file_extension}'
         blob = self.bucket.blob(f'{self.folder_path_in_bucket}/{destination_blob_name}')
-        blob.upload_from_file(source_file)
-        print(f"File {source_file.filename} uploaded to {self.folder_path_in_bucket}/{destination_blob_name}.")
+        blob.upload_from_filename(source_file)
+        print(f"File {source_file} uploaded to {self.folder_path_in_bucket}/{destination_blob_name}.")
     
     def upload_blob(self, source_file_name, destination_blob_name):
         """Uploads a file to the bucket."""

@@ -1,0 +1,12 @@
+# Creating cloudbuild.yaml file
+# Building the image
+# Pushing the image to the container registry
+# Deploying the image to the cloud app engine
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/id-smu-lpr', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/id-smu-lpr']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['app', 'deploy', '--image-url', 'gcr.io/$PROJECT_ID/id-smu-lpr']
+timeout: 1600s
