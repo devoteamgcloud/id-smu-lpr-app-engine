@@ -1,10 +1,9 @@
 import base64
 from enum import Enum
-import io
 from google.cloud import vision
 import cv2
 import numpy as np
-from abc import ABC, abstractmethod
+import streamlit as st
 
 class FeatureType(Enum):
     PAGE = 1
@@ -45,7 +44,6 @@ class VisionHandler:
         self._image = image
 
     def doc_text_detection(self, base64_image, feature):
-        """Returns document bounds given an image."""
         print('Running document text detection...')
         bounds = []
         texts = []
@@ -57,33 +55,32 @@ class VisionHandler:
         response = self.client.document_text_detection(image=image)
         document = response.full_text_annotation
 
-        # Collect specified feature bounds by enumerating all document features
-        for page in document.pages:
-            for block in page.blocks:
-                for paragraph in block.paragraphs:
-                    for word in paragraph.words:
-                        tmp_text = ''
-                        for symbol in word.symbols:
-                            tmp_text += symbol.text
-                            if feature == FeatureType.SYMBOL:
-                                bounds.append(symbol.bounding_box)
-                                # texts.append(symbol.text)
-                                # confidences.append(symbol.confidence)
+        def collect_feature_bounds(doc_obj, feature):
+            """Helper function to collect specified feature bounds."""
+            if feature == FeatureType.PAGE:
+                bounds.extend([page.bounding_box for page in doc_obj.pages])
+            else:
+                for page in doc_obj.pages:
+                    for block in page.blocks:
+                        if feature == FeatureType.BLOCK:
+                            bounds.append(block.bounding_box)
+                        else:
+                            for paragraph in block.paragraphs:
+                                if feature == FeatureType.PARA:
+                                    bounds.append(paragraph.bounding_box)
+                                else:
+                                    for word in paragraph.words:
+                                        if feature == FeatureType.WORD:
+                                            bounds.append(word.bounding_box)
+                                            texts.append(''.join([symbol.text for symbol in word.symbols]))
+                                            confidences.append(word.confidence)
+                                        else:
+                                            for symbol in word.symbols:
+                                                tmp_text += symbol.text
+                                                if feature == FeatureType.SYMBOL:
+                                                    bounds.append(symbol.bounding_box)
 
-                        if feature == FeatureType.WORD:
-                            bounds.append(word.bounding_box)
-                            texts.append(tmp_text)
-                            confidences.append(word.confidence)
-
-                    if feature == FeatureType.PARA:
-                        bounds.append(paragraph.bounding_box)
-                        # texts.append(paragraph.text)
-                        confidences.append(paragraph.confidence)
-
-                if feature == FeatureType.BLOCK:
-                    bounds.append(block.bounding_box)
-                    # texts.append(block.text)
-                    confidences.append(block.confidence)
+        collect_feature_bounds(document, feature)
 
         # The list `bounds` contains the coordinates of the bounding boxes.
         return bounds, texts, confidences

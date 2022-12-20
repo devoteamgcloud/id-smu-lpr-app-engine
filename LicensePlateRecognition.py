@@ -11,10 +11,6 @@ import pandas as pd
 storageHandler = StorageHandler(cfg.PROJECT_ID, cfg.BUCKET_NAME, cfg.FOLDER_PATH_IN_BUCKET)
 visionHandler = VisionHandler()
 
-def upload_async(file_path, job_id):
-    print("Uploading file to GCP cloud storage with job_id: ", job_id)
-    # storageHandler.upload_base64_image(file_path, st.session_state['job_id'])
-
 # Cache the function to avoid re-running the OCR
 @st.cache(allow_output_mutation=True)
 def detect_text_in_image(base64_image):
@@ -55,8 +51,8 @@ if States.check_password():
 
         # Check if the file has been uploaded
         if st.session_state['uploaded'] == False:
-            # Save the file to GCP cloud storage in a separate thread
-            thread = threading.Thread(target=upload_async, args=(base64_bytes, st.session_state['job_id']))
+            # Save the file to GCP cloud storage in a separate thread asynchonously
+            thread = threading.Thread(target=storageHandler.upload_base64_image, args=(base64_bytes, st.session_state['job_id']))
             thread.start()
             st.session_state['uploaded'] = True
         
