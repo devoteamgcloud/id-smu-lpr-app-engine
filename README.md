@@ -44,20 +44,21 @@ This project uses Cloud Vision API and Cloud Storage to recognize license plate 
 
 ## File Structure
 ```
-LicensePlateRecognition/
+id-smu-lpr-app-engine/
 ├── assets
 │   └── devoteam_logo.png
 ├── config
 │   └── config.py
 ├── utils
-│   ├── ocr.py
-│   └── storage.py
-├── app.yaml
-├── cloudbuild.yaml
+│   ├── helper.py
+│   ├── storage.py
+│   └── vision.py
 ├── Dockerfile
 ├── LICENSE
 ├── LicensePlateRecognition.py
 ├── README.md
+├── app.yaml
+├── cloudbuild.yaml
 └── requirements.txt
 ```
 
