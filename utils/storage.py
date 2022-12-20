@@ -17,9 +17,9 @@ class StorageHandler:
             encoded_string = base64.b64encode(image_file.read())
         return encoded_string
     
-    def upload_base64_image(self, base64_image_string):
+    def upload_base64_image(self, base64_image_string, job_id):
         """Uploads an encoded image to the bucket."""
-        destination_blob_name = f'{str(uuid.uuid4())}.jpg'
+        destination_blob_name = f'{job_id}.jpg'
         blob = self.bucket.blob(f'{self.folder_path_in_bucket}/{destination_blob_name}')
         blob.upload_from_string(base64.b64decode(base64_image_string))
         print(f"File  uploaded to {self.folder_path_in_bucket}/{destination_blob_name}.")
