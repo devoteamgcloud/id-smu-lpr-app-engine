@@ -10,4 +10,10 @@ service: id-smu-lpr
 manual_scaling:
   instances: 1
 
+# Details resource for the App Engine environment to use.
+resources:
+  cpu: 1
+  memory_gb: 2
+  disk_size_gb: 10
+
 entrypoint: streamlit run LicensePlateRecognition.py --server.port $PORT --server.enableXsrfProtection=false
